@@ -60,5 +60,3 @@ class Vec2:
     @property
     def tuple(self):
         return (self.x, self.y)
-
-
