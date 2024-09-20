@@ -16,12 +16,12 @@ class Redactor:
         self.current_block = 0
         self.map_area = pg.Rect(WIDTH // 4, 50, WIDTH // 3 * 4, HEIGHT)
         self.tile_size = 25
-        path = join("../assets", "blocks")
+        path = join(ROOT, "assets", "blocks")
         self.images_paths = [
             join(path, f) for f in listdir(path) if isfile(join(path, f))
         ]
         spawn_image = pg.transform.scale(
-            pg.image.load(join("../assets", "player", "spawn.png")),
+            pg.image.load(join(ROOT, "assets", "player", "spawn.png")),
             (self.tile_size, self.tile_size),
         )
         self.spawn = Block(

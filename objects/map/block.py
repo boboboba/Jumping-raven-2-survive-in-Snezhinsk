@@ -1,9 +1,13 @@
+from os.path import join
+
 from objects.game_object import GameObject
 import pygame as pg
 
+from other.constants import ROOT
+
 
 class Block(GameObject):
-    TEXTURE_PATH = "../../assets/textures"
+    TEXTURE_PATH = join(ROOT, "assets", "textures")
 
     def __init__(self, x, y, width, height, sprite_path=None):
         super().__init__(x, y, width, height)
