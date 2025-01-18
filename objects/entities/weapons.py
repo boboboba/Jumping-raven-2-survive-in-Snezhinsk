@@ -70,7 +70,7 @@ class ShotGun(Weapon):
                 20,
                 20,
                 60,
-                sprite_path=join(ROOT, "assets", "bullets", "bullet.png"),
+                sprite_path=join("assets", "bullets", "bullet.png"),
             )
             bullet.velocity = self.direction.rotate(random.random() - 0.5) * 50
             bullets.append(bullet)

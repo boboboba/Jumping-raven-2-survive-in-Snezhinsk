@@ -18,7 +18,7 @@ class Wrap:
         self.width = obj.width
         self.height = obj.height
         self.direction = obj.direction
-        self.sprite_path = obj.sprite_path
+        self.local_path = obj.local_path
         self.team = obj.team
 
         if isinstance(obj, Player):
@@ -47,7 +47,7 @@ class Wrap:
                 self.position.y,
                 self.width,
                 self.height,
-                self.sprite_path,
+                self.local_path,
             )
             obj.state = self.state
             obj.load_images()
@@ -61,7 +61,7 @@ class Wrap:
                 self.width,
                 self.height,
                 self.damage,
-                self.sprite_path,
+                self.local_path,
             )
             if issubclass(type, BlowingBullet):
                 obj.radius = self.radius
@@ -72,7 +72,7 @@ class Wrap:
                 self.width,
                 self.height,
                 self.duration,
-                sprite_path=self.sprite_path,
+                sprite_path=self.local_path,
             )
         obj.velocity = self.velocity
         obj.team = self.team

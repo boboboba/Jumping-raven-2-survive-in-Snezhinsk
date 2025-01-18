@@ -29,7 +29,7 @@ class Redactor:
             312.5,
             self.tile_size,
             self.tile_size,
-            sprite_path=join("../assets", "player", "spawn.png"),
+            sprite_path=join(ROOT, "assets", "player", "spawn.png"),
         )
         self.images = [spawn_image] + [
             pg.transform.scale(

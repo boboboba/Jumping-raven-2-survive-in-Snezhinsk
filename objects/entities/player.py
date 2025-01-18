@@ -11,7 +11,7 @@ from other.constants import ROOT
 
 
 class Player(Entity):
-    def __init__(self, x, y, width, height, sprite_path=None):
+    def __init__(self, x, y, width, height, sprite_path=""):
         super().__init__(x, y, width, height, sprite_path)
         self.die_count = 0
         self.max_jumps = 2
@@ -19,9 +19,9 @@ class Player(Entity):
         self.player_image = None
         self.jumped_this_frame = False
         self.weapons = [
-            Gun(0, 0, 50, join(ROOT, "assets", "weapons", "pistol.png")),
-            ShotGun(0, 0, 50, join(ROOT, "assets", "weapons", "shotgun.png")),
-            Rocket(0, 0, 75, join(ROOT, "assets", "weapons", "rpg.png")),
+            Gun(0, 0, 50, join("assets", "weapons", "pistol.png")),
+            ShotGun(0, 0, 50, join("assets", "weapons", "shotgun.png")),
+            Rocket(0, 0, 75, join("assets", "weapons", "rpg.png")),
             Egg(0, 0, 50, ""),
         ]
         self.current_weapon = 0
@@ -30,10 +30,13 @@ class Player(Entity):
         self.state = "stand"
         self.right = True
         self.frames = 0
-        if sprite_path is not None:
+        if sprite_path != "":
             self.load_images()
             self.load_animations()
-            self.player_image = self.animations[self.state][0]
+            if len(self.animations[self.state]) > 0:
+                self.player_image = self.animations[self.state][0]
+            else:
+                self.player_image = pg.surface.Surface((self.width, self.height))
 
         self.buffs = []
         self.invisible = False
@@ -85,7 +88,7 @@ class Player(Entity):
 
     def shoot(self):
 
-        if self.coldown < 0:
+        if self.coldown <= 0:
             self.coldown = 30
             bullets = self.weapons[self.current_weapon].get_bullet()
             for bullet in bullets:
@@ -181,12 +184,13 @@ class Player(Entity):
         self.frames += len(animation) / 10
         if self.frames >= len(animation):
             self.frames = 0
-        if self.right:
-            self.player_image = animation[int(self.frames)]
-        else:
-            self.player_image = pg.transform.flip(
-                animation[int(self.frames)], True, False
-            )
+        if len(animation) > 0:
+            if self.right:
+                self.player_image = animation[int(self.frames)]
+            else:
+                self.player_image = pg.transform.flip(
+                    animation[int(self.frames)], True, False
+                )
 
     def draw(self, screen, center):
         position, top_left, _ = self.convert_coordinates(center)
@@ -195,7 +199,7 @@ class Player(Entity):
             color = (0, 255, 0) if self.team == 0 else (255, 0, 0)
             pg.draw.rect(screen, color, hp_bar)
             self.weapons[self.current_weapon].draw(screen, center)
-            if self.sprite_path is not None:
+            if self.local_path != "":
                 screen.blit(
                     self.player_image, (top_left.x, top_left.y, self.width, self.height)
                 )

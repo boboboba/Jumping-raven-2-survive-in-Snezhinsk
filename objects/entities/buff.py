@@ -1,8 +1,10 @@
 from objects.entities.entity import Entity
+from abc import ABC, abstractmethod
+
 
 
 class Buff(Entity):
-    def __init__(self, x, y, width, height, duration, sprite_path=None):
+    def __init__(self, x, y, width, height, duration, sprite_path=""):
         super().__init__(x, y, width, height, sprite_path=sprite_path)
         self.duration = duration
         self.ended = False

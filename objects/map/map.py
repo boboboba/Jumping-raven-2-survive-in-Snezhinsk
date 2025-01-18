@@ -27,7 +27,7 @@ class Map:
             rect = line.split(";")
             rect = [float(x) for x in rect[:4]] + [rect[4][:-1]]
             if not w_sprites:
-                rect[4] = None
+                rect[4] = ""
             self.blocks[(rect[0], rect[1])] = Block(
                 rect[0], rect[1], rect[2], rect[3], sprite_path=rect[4]
             )

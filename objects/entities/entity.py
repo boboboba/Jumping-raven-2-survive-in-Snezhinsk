@@ -3,26 +3,29 @@ from physics.vec2 import Vec2
 from objects.game_object import GameObject
 from os import listdir
 from os.path import isfile, join
+from other.constants import ROOT
 
 
 class Entity(GameObject):
     GRAVITY = Vec2(0, 0.6)
 
-    def __init__(self, x, y, width, height, sprite_path=None):
+    def __init__(self, x, y, width, height, sprite_path=""):
         super().__init__(x, y, width, height)
         self.velocity = Vec2(0, 0)
         self.is_landed = False
-        self.sprite_path = sprite_path
         self.direction = Vec2(1, 0)
         self.is_dead = False
         self.alive = True
-        self.animations = dict()
+        self.animations = {'stand':[], 'jump': [], 'run':[]}
         self.frames = 0
         self.team = 0
-        self.sprite_path = sprite_path
+        self.local_path = sprite_path
         self.image = None
         self.load_images()
 
+    @property
+    def sprite_path(self):
+        return join(ROOT, self.local_path)
     def apply_forces(self):
         if not self.is_landed:
             self.velocity = self.velocity + Entity.GRAVITY
@@ -38,7 +41,7 @@ class Entity(GameObject):
         self.position += Vec2(dx, dy)
 
     def load_images(self):
-        if self.sprite_path is not None:
+        if self.local_path != "":
             self.image = pg.image.load(self.sprite_path)
             self.image = pg.transform.scale(self.image, (self.width, self.height))
 
@@ -126,7 +129,7 @@ class Entity(GameObject):
             return
         pos, top_left, _ = self.convert_coordinates(center)
         rect = top_left.tuple + self.size.tuple
-        if self.sprite_path is not None:
+        if self.local_path is not None:
             screen.blit(self.image, rect)
 
     def update_from_wrap(self, wrap):
@@ -135,4 +138,4 @@ class Entity(GameObject):
         self.direction = wrap.direction
         self.width = wrap.width
         self.height = wrap.height
-        self.sprite_path = wrap.sprite_path
+        self.local_path = wrap.local_path

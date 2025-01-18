@@ -6,15 +6,17 @@ from other.functions import load_animation
 
 
 class Effect(GameObject):
-    def __init__(self, x, y, width, height, animation_path=None, lifetime=120):
+    def __init__(self, x, y, width, height, animation_path="", lifetime=120):
         super().__init__(x, y, width, height)
         self.velocity = Vec2(0, 0)
         self.image = pg.Surface((width, height))
-        if animation_path is not None:
+        if animation_path != "":
             self.animation = [
                 pg.transform.scale(animation, (self.width, self.height))
                 for animation in load_animation(animation_path)
             ]
+        else:
+            self.animation = []
         self.frames = 0
         self.lifetime = lifetime
         self.alive = True
@@ -27,6 +29,8 @@ class Effect(GameObject):
             self.alive = False
 
     def animate(self):
+        if not self.animation:
+            return
         self.frames += 0.2
         if self.frames >= len(self.animation):
             self.alive = False

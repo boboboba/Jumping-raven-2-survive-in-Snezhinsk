@@ -17,16 +17,16 @@ from other.constants import ROOT
 
 from other.wrapper import Wrap
 
-MULTIPLAYER = True
+MULTIPLAYER = False
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, multiplayer=MULTIPLAYER):
         with open(join(ROOT, "config.txt")) as f:
             ip = f.readline()[:-1].split(":")[1]
             map = f.readline().split(":")[1]
         self.team = -1
-        if MULTIPLAYER:
+        if multiplayer:
             self.network = Network(ip)
             try:
                 id, lines, team = self.network.connect()
@@ -36,10 +36,10 @@ class Game:
             self.id = id
             self.team = team
         self.map = Map()
-        if MULTIPLAYER:
+        if multiplayer:
             self.map.load_from_list(lines)
         else:
-            self.map.load_from_file(map)
+            self.map.load_from_file(join(ROOT, "assets", "maps", map))
         self.pressed_keys = []
         self.running = True
         self.screen = screen
@@ -49,7 +49,7 @@ class Game:
             self.map.spawn_position.y,
             48,
             48,
-            sprite_path=join(ROOT, "assets", "player"),
+            sprite_path=join("assets", "player"),
         )
         self.player.team = self.team
 
@@ -73,6 +73,7 @@ class Game:
             self.thread.start()
         while self.running:
             if self.dead:
+                self.running = False
                 return
             self.act_entities(
                 self.player, *self.players.values(), *self.bullets, *self.buffs
@@ -84,10 +85,6 @@ class Game:
             self.check_collisions(self.players.values())
             self.update_entities()
             self.controls(pg.event.get())
-
-            self.frames = (self.frames + 1) % 60
-            if self.frames == 0:
-                print(self.player.position)
             self.draw()
             pg.display.flip()
             clock.tick(60)
@@ -98,6 +95,7 @@ class Game:
         for event in events:
             if event.type == pg.QUIT:
                 self.dead = True
+                self.running = False
                 # self.thread.is_alive = False
                 quit()
             if event.type == pg.KEYDOWN:

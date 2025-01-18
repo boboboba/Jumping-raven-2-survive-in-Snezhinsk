@@ -9,7 +9,7 @@ from other.constants import ROOT
 
 
 class Bullet(Entity):
-    def __init__(self, x, y, width, height, damage, sprite_path=None):
+    def __init__(self, x, y, width, height, damage, sprite_path=""):
         super().__init__(x, y, width, height, sprite_path=sprite_path)
         self.damage = damage
         self.lifetime = 0
@@ -20,7 +20,6 @@ class Bullet(Entity):
 
     def update(self):
         super().update()
-        # print('x:', self.position.x,'y:',self.position.y)
         self.direction = self.velocity.normalize()
         self.lifetime += 1
         if self.lifetime > 300:
@@ -52,12 +51,12 @@ class Bullet(Entity):
         rotated_image = pg.transform.rotate(self.image, angle)
         pos, top_left, _ = self.convert_coordinates(center)
         rect = rotated_image.get_rect(center=pos.tuple)
-        if self.sprite_path is not None:
+        if self.local_path is not None:
             screen.blit(rotated_image, rect)
 
 
 class BlowingBullet(Bullet):
-    def __init__(self, x, y, width, height, damage, sprite_path=None):
+    def __init__(self, x, y, width, height, damage, sprite_path=""):
         super().__init__(x, y, width, height, damage, sprite_path=sprite_path)
         self.radius = 250
         self.blowing = False
@@ -97,7 +96,7 @@ class BlowingBullet(Bullet):
 
 
 class Grenade(Bullet):
-    def __init__(self, x, y, width, height, damage, sprite_path=None):
+    def __init__(self, x, y, width, height, damage, sprite_path=""):
         super().__init__(x, y, width, height, damage, sprite_path=sprite_path)
         self.radius = 250
         self.blowing = False
@@ -171,5 +170,5 @@ class Grenade(Bullet):
             return
         pos, top_left, _ = self.convert_coordinates(center)
         rect = self.image.get_rect(center=pos.tuple)
-        if self.sprite_path is not None:
+        if self.local_path != "":
             screen.blit(self.image, rect)

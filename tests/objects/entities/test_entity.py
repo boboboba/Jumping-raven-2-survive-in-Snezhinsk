@@ -1,6 +1,8 @@
 from objects.map.map import Map
 from physics.vec2 import Vec2
 from objects.entities.entity import Entity
+from os.path import join
+from other.constants import ROOT
 
 
 def test_init(mocker):
@@ -8,11 +10,10 @@ def test_init(mocker):
     entity = Entity(100, 100, 200, 200, sprite_path="path")
     assert entity.velocity == Vec2(0, 0)
     assert entity.is_landed == False
-    assert entity.sprite_path == "path"
+    assert entity.local_path == "path"
     assert entity.direction == Vec2(1, 0)
     assert not entity.is_dead
     assert entity.alive
-    assert entity.animations == dict()
     assert entity.frames == 0
     assert entity.team == 0
     assert entity.image is None
@@ -59,10 +60,10 @@ def test_load_images(mocker):
     entity.image = None
     entity.load_images()
     assert entity.image is None
-    entity.sprite_path = "path"
+    entity.local_path = "path"
     entity.image = None
     entity.load_images()
-    mock_load_image.assert_called_once_with("path")
+    mock_load_image.assert_called_once_with(join(ROOT, "path"))
     mock_transform.assert_called_once_with("image", (200, 200))
     assert entity.image == "transformed_image"
 
