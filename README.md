@@ -1,4 +1,4 @@
-# Game Name
+# Jumping raven 2: survive in Snezhinsk
 
 2D платформер-шутер на Pygame с одиночным и мультиплеерным режимами.
 
